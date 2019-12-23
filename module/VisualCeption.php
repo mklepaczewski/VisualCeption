@@ -289,6 +289,22 @@ class VisualCeption extends CodeceptionModule
     }
 
     /**
+     * Get pixel ratio of the device / screen.
+     * @return float device pixel ratio
+     */
+    private function getDevicePixelRatio() : float {
+        return floatval($this->webDriver->executeScript('
+            var resolution = 1;
+            if("deviceXDPI" in screen) {
+                resolution = screen.deviceXDPI / screen.logicalXDPI;
+            } else if("devicePixelRatio" in window) {
+                resolution = window.devicePixelRatio;
+            }
+            return resolution;
+        '));
+    }
+
+    /**
      * Initialize the module and read the config.
      * Throws a runtime exception, if the
      * reference image dir is not set in the config

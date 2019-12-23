@@ -389,6 +389,7 @@ class VisualCeption extends CodeceptionModule
 
         $elementPath = $this->getScreenshotPath($identifier);
         $screenShotImage = new \Imagick();
+        $this->hideElementsForScreenshot($excludeElements);
 
         if ($this->config["fullScreenShot"] == true) {
             $height = $this->webDriver->executeScript("var ele=document.querySelector('html'); return ele.scrollHeight;");
@@ -412,14 +413,14 @@ class VisualCeption extends CodeceptionModule
             $fullShot->writeImage($elementPath);
 
         } else {
-            $this->hideElementsForScreenshot($excludeElements);
             $screenshotBinary = $this->webDriver->takeScreenshot();
-            $this->resetHideElementsForScreenshot($excludeElements);
 
             $screenShotImage->readimageblob($screenshotBinary);
             $screenShotImage->cropImage($coords['width'], $coords['height'], $coords['offset_x'], $coords['offset_y']);
             $screenShotImage->writeImage($elementPath);
         }
+
+        $this->resetHideElementsForScreenshot($excludeElements);
 
         return $elementPath;
     }

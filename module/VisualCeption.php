@@ -389,10 +389,14 @@ class VisualCeption extends CodeceptionModule
 
         $elementPath = $this->getScreenshotPath($identifier);
         $screenShotImage = new \Imagick();
+        list($viewportHeight, $devicePixelRatio) = $this->webDriver->executeScript("return [window.innerHeight, window.devicePixelRatio]");
+        /* Take $devicePixelRatio into account and rescale $coords */
+        foreach($coords as &$coord) {
+            $coord *= $devicePixelRatio;
+        }
 
         if ($this->config["fullScreenShot"] == true) {
             $height = $this->webDriver->executeScript("var ele=document.querySelector('html'); return ele.scrollHeight;");
-            list($viewportHeight, $devicePixelRatio) = $this->webDriver->executeScript("return [window.innerHeight, window.devicePixelRatio]");
 
             $itr = $height / $viewportHeight;
 
